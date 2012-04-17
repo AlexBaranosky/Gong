@@ -1,0 +1,5 @@
+[
+  {:duration "00:01:00" :message "do something"}
+  {:duration "00:05:00" :message "something else"}
+  {:duration "00:05:00" :message "a third thing"}
+]
