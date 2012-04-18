@@ -8,21 +8,22 @@
 
 (defn play-wav [file-name]
   (when-not (.exists (File. file-name))
-    (throw (Exception. "couldn't find wav file")))
+    (throw (Exception. (str "Couldn't find wav file: " file-name))))
 
   (let [play-url (fn [url-string]
                    (.play (Applet/newAudioClip (URL. url-string))))
         absolute-name (.getAbsolutePath (File. file-name))
         url-string (str "file:/" absolute-name)]
-    (println url-string)
-    (play-url url-string)))
+    (println (str "Playing: " url-string))
+;    (play-url url-string)
+    ))
 
 (defn- speak [msg]
 ;  (doto (.getVoice (VoiceManager/getInstance) "kevin16")
 ;    (.startBatch)
 ;    (.speak msg)
 ;    (.endBatch))
-  (println (str "Speaking: " msg "...")))
+  (println (str "Speaking: " msg)))
 
 (def ^:private secs-per-min 60)
 (def ^:private secs-per-hour 3600)
@@ -48,11 +49,12 @@
     
     (speak message)
 ;    (Thread/sleep (* millis-per-sec (parse-secs-from duration)))
-    (play-wav "/resources/blong2.wav")
-    ))
+    (println (str "Duration: " (parse-secs-from duration) " secs"))
+    (play-wav "blong2.wav")
+    (println "Done.\n")))
 
 (defn -main []
   (-> "routine.cljdata"
-    slurp
-    read-string
-    exec-practice-routine))
+       slurp
+       read-string
+       exec-practice-routine))
