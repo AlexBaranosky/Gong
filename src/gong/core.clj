@@ -1,22 +1,20 @@
 (ns gong.core
-
-;  (:use freetts)
   (:import [java.applet Applet]
            [java.io File]
            [java.net URL]
-           [com.sun.speech.freetts VoiceManager]))
+           [com.sun.speech.freetts VoiceManager]
+           [javazoom.jl.player Player]))
 
 (defn play-wav [file-name]
   (when-not (.exists (File. file-name))
     (throw (Exception. (str "Couldn't find wav file: " file-name))))
 
-  (let [play-url (fn [url-string]
-                   (.play (Applet/newAudioClip (URL. url-string))))
-        absolute-name (.getAbsolutePath (File. file-name))
-        url-string (str "file:/" absolute-name)]
-    (println (str "Playing: " url-string))
-;    (play-url url-string)
-    ))
+  (let [absolute-name (.getAbsolutePath (File. file-name))
+        bis (java.io.BufferedInputStream. (java.io.FileInputStream. absolute-name))]
+    (println (str "Playing: " absolute-name))
+    (doto (Player. bis)
+      (.play)
+      (.close))))
 
 (defn- speak [msg]
 ;  (doto (.getVoice (VoiceManager/getInstance) "kevin16")
@@ -39,7 +37,6 @@
       (+ secs
         (* mins secs-per-min)
         (* hours secs-per-hour)))))
-
 
 (defn- exec-practice-routine
   "practice-routine-sections looks like:
