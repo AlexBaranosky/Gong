@@ -48,8 +48,8 @@
   (doseq [{:keys [duration message]} practice-routine-sections]
     
     (speak message)
-;    (Thread/sleep (* millis-per-sec (parse-secs-from duration)))
     (println (str "Duration: " (parse-secs-from duration) " secs"))
+    (Thread/sleep (* millis-per-sec (parse-secs-from duration)))
     (play-wav "blong2.wav")
     (println "Done.\n")))
 
