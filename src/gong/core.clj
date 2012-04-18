@@ -1,4 +1,5 @@
 (ns gong.core
+  (:use [speech-synthesis.say :only [say]])
   (:import [java.applet Applet]
            [java.io File]
            [java.net URL]
@@ -17,10 +18,7 @@
       (.close))))
 
 (defn- speak [msg]
-;  (doto (.getVoice (VoiceManager/getInstance) "kevin16")
-;    (.startBatch)
-;    (.speak msg)
-;    (.endBatch))
+  (say msg)
   (println (str "Speaking: " msg)))
 
 (def ^:private secs-per-min 60)
