@@ -24,20 +24,20 @@
 ;    (.endBatch))
   (println (str "Speaking: " msg "...")))
 
-(def ^:private sec-per-min 60)
-(def ^:private sec-per-hour 360)
+(def ^:private secs-per-min 60)
+(def ^:private secs-per-hour 3600)
 (def ^:private millis-per-sec 1000)
 
 (defn- parse-secs-from
   "seconds from string such as \"00:05:00\" ;=> (300 seconds)"
   [string]
-  (let [[_ hours mins secs] (re-matches #"^\d\d:\d\d:\d\d$" string)]
+  (let [[_ hours mins secs] (re-matches #"^(\d\d):(\d\d):(\d\d)$" string)]
     (when-not hours
       (throw (Exception. (format "Duration, %s, was not formatted correctly." string))))
     (let [[hours mins secs] (map #(Integer/parseInt %) [hours mins secs])]
       (+ secs
-        (* mins sec-per-min)
-        (* hours sec-per-hour)))))
+        (* mins secs-per-min)
+        (* hours secs-per-hour)))))
 
 
 (defn- exec-practice-routine
