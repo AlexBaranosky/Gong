@@ -12,14 +12,9 @@
 
   (let [absolute-name (.getAbsolutePath (File. file-name))
         bis (java.io.BufferedInputStream. (java.io.FileInputStream. absolute-name))]
-    (println (str "Playing: " absolute-name))
     (doto (Player. bis)
       (.play)
       (.close))))
-
-(defn- speak [msg]
-  (say msg)
-  (println (str "Speaking: " msg)))
 
 (def ^:private secs-per-min 60)
 (def ^:private secs-per-hour 3600)
@@ -41,12 +36,9 @@
    [ {:duration \"00:01:00\" :message \"do something\"} {...} ...]"
   [practice-routine-sections]
   (doseq [{:keys [duration message]} practice-routine-sections]
-    
-    (speak message)
-    (println (str "Duration: " (parse-secs-from duration) " secs"))
+    (say message)
     (Thread/sleep (* millis-per-sec (parse-secs-from duration)))
-    (play-wav "blong2.wav")
-    (println "Done.\n")))
+    (play-wav "blong2.wav")))
 
 (defn -main []
   (-> "routine.cljdata"
