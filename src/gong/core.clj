@@ -1,5 +1,5 @@
 (ns gong.core
-  (:use [speech-synthesis.say :only [say]])
+  (:require [speech-synthesis.say :refer [say]])
   (:import [java.applet Applet]
            [java.io File]
            [java.net URL]
