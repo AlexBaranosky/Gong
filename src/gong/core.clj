@@ -35,6 +35,9 @@
   "practice-routine-sections looks like:
    [ {:duration \"00:01:00\" :message \"do something\"} {...} ...]"
   [practice-routine-sections]
+  (println "** Routine Summary **")
+  (doseq [{:keys [duration message]} practice-routine-sections] 
+    (println (str duration " " message)))
   (doseq [{:keys [duration message]} practice-routine-sections]
     (say message)
     (Thread/sleep (* millis-per-sec (parse-secs-from duration)))
