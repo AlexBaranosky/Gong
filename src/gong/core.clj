@@ -1,6 +1,6 @@
 (ns gong.core
   (:require [speech-synthesis.say :refer [say]])
-  (:import [java.io File]
+  (:import [java.io BufferedInputStream File FileInputStream]
            [javazoom.jl.player Player]))
 
 (defn- play-wav [file-name]
@@ -8,8 +8,8 @@
     (throw (Exception. (str "Couldn't find wav file: " file-name))))
 
   (let [absolute-name (.getAbsolutePath (File. file-name))
-        bis (java.io.BufferedInputStream. (java.io.FileInputStream. absolute-name))]
-    (doto (Player. bis)
+        input-stream (BufferedInputStream. (FileInputStream. absolute-name))]
+    (doto (Player. input-stream)
       (.play)
       (.close))))
 
