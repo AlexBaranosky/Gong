@@ -1,5 +1,6 @@
 (ns gong.core
-  (:require [speech-synthesis.say :refer [say]])
+  (:require [speech-synthesis.say :refer [say]]
+            [clojure.string :as str])
   (:import [java.io BufferedInputStream File FileInputStream]
            [javazoom.jl.player Player]))
 
@@ -28,6 +29,22 @@
                            (* mins secs-per-min)
                            (* hours secs-per-hour))))))
 
+(defn- pad-left [s] ;; this should be from a library :)
+  (cond (zero? (count s)) "00"
+        (= 1 (count s))   (str "0" s)
+        :else             s))
+
+(defn- int-div [& ns]
+  (int (apply / ns)))
+
+(defn- hours-minutes-and-seconds [millis]
+  (let [secs (int-div millis 1000)
+        hours-place (int-div secs 3600)
+        mins-place (mod (int-div secs 60) 60)
+        secs-place (mod secs 60)]
+    (str/join ":" 
+      (map (comp pad-left str) [hours-place mins-place secs-place]))))
+
 (defn- exec-practice-routine
   "practice-routine-sections looks like:
    [ {:duration \"00:01:00\" :message \"do something\"} {...} ...]"
@@ -36,6 +53,7 @@
   (println "** Routine Summary **")
   (doseq [{:keys [duration message]} practice-routine-sections] 
     (println (str duration " " message)))
+  (println "Total Time: " (hours-minutes-and-seconds (reduce + (map (comp parse-millis-from :duration) practice-routine-sections))))
 
   (doseq [{:keys [duration message]} practice-routine-sections]
     (say message)
